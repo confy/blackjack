@@ -6,38 +6,18 @@ class Card():
             raise AttributeError(f"Suit must be in {possible_suits}")
         if rank not in possible_ranks:
             raise AttributeError(f"Suit must be in {possible_ranks}")
-        self._suit = suit
-        self._rank = rank
-        self._char = card_characters[suit][rank]
-        self._value = card_values[rank]
+        self.suit = suit
+        self.rank = rank
+        self.char = card_characters[suit][rank]
+        self.value = card_values[rank]
         
-        
-    @property
-    def suit(self):
-        """ Getter for the suit """
-        return self._suit
-    
-    @property
-    def rank(self):
-        """ Getter for the rank """
-        return self._rank
-    
-    @property
-    def char(self):
-        """ getter for the card character string"""
-        return self._char
-    
-    @property
-    def value(self):
-        """ getter for value """
-        return self._value
     
     def demote(self):
         """ demotes aces value to 1 """
-        if self._rank != "A":
+        if self.rank != "A":
             raise TypeError("Card must be an Ace")
         else:
-            self._value = 1
+            self.value = 1
         
     
         
