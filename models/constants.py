@@ -64,3 +64,11 @@ card_values = {"A": 11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, 
 possible_suits = ["clubs", "diamonds", "hearts", "spades"]
 possible_ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
 
+
+WINDOW_SIZE = (800, 600)
+CARD_SIZE = (140, 190)
+CARD_SPACING = 20
+DEALER_OFFSET = (CARD_SPACING,CARD_SPACING)
+PLAYER_OFFSET = (WINDOW_SIZE[0] - 2 *CARD_SIZE[1] - CARD_SPACING ,CARD_SPACING)
+WHITE = (255, 255, 255)
+GREEN = (53,101,77)

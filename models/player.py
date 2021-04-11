@@ -1,14 +1,20 @@
 from .card import Card
-class Hand():
+from pygame.sprite import Group
+from .constants import CARD_SIZE, CARD_SPACING, PLAYER_OFFSET, DEALER_OFFSET
+
+class Player(Group):
     """ Class for player and dealer hands """
-    def __init__(self):
+    def __init__(self, name:str):
+        super().__init__()
         self._cards = []
+        self._name = name
     
     def add_card(self, card) -> None:
         """ Adds cards to the hand """
         if not isinstance(card, Card):
             raise AttributeError("Only cards can be added")
         self._cards.append(card)
+        self.add(card)
         
     def demote_first_ace(self) -> None:
         """ demotes the first ace in the hand"""
@@ -28,7 +34,15 @@ class Hand():
         return sum(card.value for card in self._cards)
     
     def serialize(self) -> str:
-        """ Returns a readable representation of the hand """
+        """ Returns a unicode representation of the hand for web api"""
         output = ' '.join(card.char for card in self._cards)
         output += " = " + str(self.value)
         return output
+    
+    def update(self):
+        super().update()
+        for i, sprite in enumerate(self.sprites()):
+            sprite.rect.x = i * CARD_SIZE[0] + CARD_SPACING
+            if self._name == 'player':
+                sprite.rect.y = PLAYER_OFFSET[0]
+            
