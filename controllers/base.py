@@ -1,6 +1,7 @@
 import pygame
 import pygame.locals
 
+
 class PygameController:
     def _run_loop(self):
         running = True
