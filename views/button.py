@@ -1,18 +1,19 @@
 import pygame.font
-from constants import WHITE, RED, BLUE, YELLOW, WINDOW_SIZE
+from constants import WHITE, RED, BLUE, YELLOW
 class Button:
     """ Root class for buttons """
     def __init__(self):
         self.button_text = str()
         self.button_color = tuple()
-        self.txt_offset = 5
+        self.txt_offset = 25
+
         
     def get_button_image(self):
         """ Creates a surface for the button and returns """
         font = pygame.font.SysFont("arial", 40, bold=True)
         dimensions = font.size(self.button_text)
         text = font.render(self.button_text, True, WHITE)
-        surface = pygame.Surface((100, dimensions[1] + 10))
+        surface = pygame.Surface((200, dimensions[1] + 10))
         surface.fill(self.button_color)
         surface.blit(text, (self.txt_offset, 5))
         
@@ -24,7 +25,6 @@ class Hit(Button):
         super().__init__()
         self.button_text = "Hit"
         self.button_color = BLUE
-        self.txt_offset = 27
    
         
 class Stand(Button):
@@ -39,6 +39,5 @@ class Bet(Button):
         super().__init__()
         self.button_text = "Bet"
         self.button_color = YELLOW
-        self.txt_offset = 23
 
 

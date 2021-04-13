@@ -11,7 +11,6 @@ class PygameController:
                 if event.type == pygame.locals.QUIT:
                     exit()
                 elif event.type == pygame.locals.KEYDOWN:
-                    if event.key == pygame.locals.K_ESCAPE:
-                        return False
+                    return event.key
                 elif event.type == pygame.locals.MOUSEBUTTONDOWN:
                     return event.pos

@@ -1,6 +1,6 @@
 import pygame
 
-from constants import WINDOW_SIZE, LEVEL_DONE_COLOR, LEVEL_DONE_MSG_RECT, LEVEL_DONE_TXT_OFFSET, WHITE
+from constants import WINDOW_SIZE, HAND_DONE_COLOR, HAND_DONE_MSG_RECT, HAND_DONE_TXT_OFFSET, WHITE
 
 
 class HandDoneView:
@@ -18,11 +18,11 @@ class HandDoneView:
         surface.fill((0, 0, 0, 50))
         window.blit(surface, (0,0))
         
-        pygame.draw.rect(window, LEVEL_DONE_COLOR, LEVEL_DONE_MSG_RECT)
+        pygame.draw.rect(window, HAND_DONE_COLOR, HAND_DONE_MSG_RECT)
         font = pygame.font.SysFont("arial", 48, bold=True)
         profit_str = self._profit
         if self._profit >= 0:
             profit_str = f"+{profit_str}"
         text = font.render(f"{self._message} | Profit: {profit_str}", True, WHITE)
-        window.blit(text, LEVEL_DONE_TXT_OFFSET)
+        window.blit(text, HAND_DONE_TXT_OFFSET)
         pygame.display.flip()

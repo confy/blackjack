@@ -1,6 +1,7 @@
 import pygame
 from .base import PygameController
 from .hand_done import HandDoneController
+from .bet_input import BetInputController
 from models import Deck, Player
 from constants import WINDOW_SIZE
 from views import MainView
@@ -12,8 +13,14 @@ class GameController(PygameController):
         self._window = pygame.display.set_mode(WINDOW_SIZE)
         self.logo = pygame.image.load("assets/spades-32.png")
         pygame.display.set_icon(self.logo)
-        pygame.display.set_caption("Blackjack - Adrian Mc", )
+        pygame.display.set_caption("Blackjack - Adrian Mc")
+        pygame.mixer.init()
+        ## Song is Freddie Freeloader - Miles Davis
+        pygame.mixer.music.load("assets/freddie.mp3")
+        pygame.mixer.music.set_volume(0.2)
+        pygame.mixer.music.play()
         self._view = MainView(self._window)
+        self._bet_input = BetInputController()
         self.deck = Deck(2)
         
         
@@ -21,14 +28,20 @@ class GameController(PygameController):
         
         running = True
         self.new_hand()
+        self._bet_input.run(self._view._window)
+        curr_bet = []
         while running:
-            self._view.display()
-            
-            mouse_pos = self._run_loop()
-            print(mouse_pos)
-            if mouse_pos[0] > 400:
-                hand_done = HandDoneController("BUST", 500)
-                hand_done.run(self._window)
+            bet_str = ''.join(curr_bet)
+            self._view.display(bet_str)
+            event = self._run_loop()
+            print(event)
+            if isinstance(event, int):
+                curr_bet = self._bet_input.run(self._view._window, event, curr_bet)
+
+            if isinstance(event, tuple):
+                pass
+                # if tuple it is mouse position
+                
                 
             
             
