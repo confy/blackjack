@@ -1,6 +1,8 @@
 import pygame
 from .base import PygameController
-from models import Deck, Player, WINDOW_SIZE
+from .hand_done import HandDoneController
+from models import Deck, Player
+from constants import WINDOW_SIZE
 from views import MainView
 
 class GameController(PygameController):
@@ -23,10 +25,11 @@ class GameController(PygameController):
             self._view.display()
             
             mouse_pos = self._run_loop()
-            
-            if mouse_pos is False:
-                running = False
-                continue
+            print(mouse_pos)
+            if mouse_pos[0] > 400:
+                hand_done = HandDoneController("BUST", 500)
+                hand_done.run(self._window)
+                
             
             
             
@@ -54,9 +57,9 @@ class GameController(PygameController):
         if self.dealer_hand.value == self.player_hand.value:
             return "Push Back"
         elif self.dealer_hand.value > self.player_hand.value:
-            return "Loss"
+            return "Loss!"
         elif self.dealer_hand.value < self.player_hand.value:
-            return "Winner"
+            return "Winner!"
         else:
             return "You broke the universe"
         

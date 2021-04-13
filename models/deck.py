@@ -1,5 +1,5 @@
 from .card import Card
-from .constants import possible_suits, possible_ranks
+from constants import possible_suits, possible_ranks
 import random
 
 class Deck():
@@ -13,7 +13,8 @@ class Deck():
 
     def get_random_card(self):
         """ gets random card, removes it and returns"""
-        rand_id = random.randint(0, len(self._cards))
+        length = len(self._cards) - 1
+        rand_id = random.randint(0, length)
         return self._cards.pop(rand_id)
                     
 

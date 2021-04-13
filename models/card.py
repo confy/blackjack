@@ -1,6 +1,6 @@
 import pygame
 from pygame.sprite import Sprite
-from .constants import card_characters, possible_suits, possible_ranks, card_values, CARD_SIZE, WHITE
+from constants import card_characters, possible_suits, possible_ranks, card_values, CARD_SIZE, WHITE
 
 
 class Card(Sprite):

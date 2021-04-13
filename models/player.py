@@ -1,6 +1,6 @@
 from .card import Card
 from pygame.sprite import Group
-from .constants import CARD_SIZE, CARD_SPACING, PLAYER_OFFSET, DEALER_OFFSET
+from constants import CARD_SIZE, CARD_SPACING, PLAYER_OFFSET, DEALER_OFFSET
 
 class Player(Group):
     """ Class for player and dealer hands """
@@ -45,4 +45,6 @@ class Player(Group):
             sprite.rect.x = i * CARD_SIZE[0] + CARD_SPACING
             if self._name == 'player':
                 sprite.rect.y = PLAYER_OFFSET[0]
+            elif self._name == 'dealer':
+                sprite.rect.y = CARD_SPACING
             
