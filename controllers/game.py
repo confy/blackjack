@@ -16,9 +16,9 @@ class GameController(PygameController):
         pygame.display.set_caption("Blackjack - Adrian Mc")
         pygame.mixer.init()
         ## Song is Freddie Freeloader - Miles Davis
-        pygame.mixer.music.load("assets/freddie.mp3")
-        pygame.mixer.music.set_volume(0.2)
-        pygame.mixer.music.play()
+        # pygame.mixer.music.load("assets/freddie.mp3")
+        # pygame.mixer.music.set_volume(0.2)
+        # pygame.mixer.music.play()
         self._view = MainView(self._window)
         self._bet_input = BetInputController()
         self.deck = Deck(2)
