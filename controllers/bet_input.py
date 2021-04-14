@@ -3,6 +3,8 @@ from views import BetInputView
 
 
 class BetInputController:
+    """ Controller for the BetInput Text box """
+
     def __init__(self):
         self._view = BetInputView()
 

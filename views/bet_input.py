@@ -7,6 +7,8 @@ class BetInputView:
         self.font = pygame.font.SysFont("arial", 40, bold=True)
 
     def display(self, window, bet_str):
+        if bet_str == '':
+            bet_str = '0'
         pygame.draw.rect(
             window, GREEN, (BET_TXT_OFFSET[0], BET_TXT_OFFSET[1], 200, 55), 0)
         pygame.draw.rect(

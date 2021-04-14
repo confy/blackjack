@@ -1,6 +1,6 @@
 import pygame
-from constants import (CARD_SIZE, WHITE, CARD_CHARACTERS, CARD_VALUES,
-                       POSSIBLE_RANKS, POSSIBLE_SUITS)
+from constants import (CARD_CHARACTERS, CARD_SIZE, CARD_VALUES, POSSIBLE_RANKS,
+                       POSSIBLE_SUITS, WHITE)
 from pygame.sprite import Sprite
 
 
@@ -24,14 +24,24 @@ class Card(Sprite):
             self.value = 1
 
     def update(self):
-        surface = pygame.Surface(CARD_SIZE)
+        surface = pygame.Surface(CARD_SIZE, pygame.SRCALPHA)
         card_filename = f"assets/sprites/card{self.suit.capitalize()}{self.rank}.png"
+        card_image = pygame.image.load(card_filename)
+        surface.blit(card_image, (0, 0))
+        self.image = pygame.Surface.convert_alpha(surface)
+        self.rect = self.image.get_rect()
+
+
+class CardBack(Sprite):
+    """ Class for the card backs, used in the deck display """
+
+    def __init__(self):
+        super().__init__()
+
+    def update(self):
+        surface = pygame.Surface(CARD_SIZE, pygame.SRCALPHA)
+        card_filename = f"assets/sprites/cardBack.png"
         card_image = pygame.image.load(card_filename).convert_alpha()
         surface.blit(card_image, (0, 0))
         self.image = surface
         self.rect = self.image.get_rect()
-
-
-if __name__ == "__main__":
-    card = Card("spades", "10")
-    print(card.value)

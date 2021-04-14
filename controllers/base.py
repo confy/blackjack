@@ -3,7 +3,10 @@ import pygame.locals
 
 
 class PygameController:
+    """ Base Controller """
+
     def _run_loop(self):
+        """ Base loop for any controller that needs it """
         running = True
         clock = pygame.time.Clock()
         while running:
@@ -14,4 +17,5 @@ class PygameController:
                 elif event.type == pygame.locals.KEYDOWN:
                     return event.key
                 elif event.type == pygame.locals.MOUSEBUTTONDOWN:
-                    return event.pos
+                    if event.button == 1:
+                        return event.pos
