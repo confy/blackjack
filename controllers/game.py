@@ -110,8 +110,11 @@ class GameController(PygameController):
             self._view.display(self.bet_str, self.player_bal, self.hand_pot)
 
         elif self.player_hand.value == 21:
+            self.deal_dealer()
             result = self.check_winner()
+            self._view.display(self.bet_str, self.player_bal, self.hand_pot)
             self.act_on_result(result)
+
 
         if self.hand_ongoing == False:
             HandDoneController(hand_done_msg, profit).run(self._view._window)
