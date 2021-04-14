@@ -95,6 +95,7 @@ class GameController(PygameController):
     def bet(self):
         self.hand_ongoing = True
         self.betAmount = 0 if self.bet_str == '' else int(self.bet_str)
+        self.betAmount = min(self.betAmount, self.player_bal)
         self.hand_pot = self.betAmount * 2
         self.player_bal -= self.betAmount
         self.new_hand(self.player_bal)

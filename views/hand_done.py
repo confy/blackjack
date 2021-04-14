@@ -21,10 +21,7 @@ class HandDoneView:
         pygame.draw.rect(window, HAND_DONE_COLOR, HAND_DONE_MSG_RECT)
         font = pygame.font.SysFont("arial", 48, bold=True)
         profit_str = abs(int(self._profit))
-        if self._profit < 0:
-            profit_str = f"-${profit_str}"
-        elif self._profit >= 0:
-            profit_str = f"+${profit_str}"
+        profit_str = f"-${profit_str}" if self._profit < 0 else f"+${profit_str}"
         text = font.render(f"{self._message} {profit_str: >16}", True, WHITE)
         window.blit(text, HAND_DONE_TXT_OFFSET)
         pygame.display.flip()

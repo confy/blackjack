@@ -1,6 +1,6 @@
 import pygame
-from constants import (BANK_TXT_OFFSET, BET_OFFSET, HIT_OFFSET,
-                       POT_TXT_OFFSET, STAND_OFFSET, WHITE)
+from constants import (BANK_TXT_OFFSET, BET_OFFSET, HIT_OFFSET, POT_TXT_OFFSET,
+                       STAND_OFFSET, WHITE)
 from models import Player
 
 from .bet_input import BetInputView
