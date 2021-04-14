@@ -19,4 +19,6 @@ py -m blackjack
 
 Card Sprites: https://opengameart.org/content/boardgame-pack
 
+Background: https://imgur.com/gallery/pJSRg
+
 Music: Miles Davis - Freddie Freeloader
