@@ -3,10 +3,13 @@ from constants import BET_TXT_OFFSET, GREEN, WHITE
 
 
 class BetInputView:
+    """ View for the bet input """
+
     def __init__(self):
         self.font = pygame.font.SysFont("arial", 40, bold=True)
 
     def display(self, window, bet_str):
+        """ Update the bet input box """
         if bet_str == '':
             bet_str = '0'
         # pygame.draw.rect(

@@ -6,9 +6,11 @@ class BetInputController:
     """ Controller for the BetInput Text box """
 
     def __init__(self):
+        """ init bet input """
         self._view = BetInputView()
 
     def run(self, window, key=0, curr_bet=[]):
+        """ Function that runs whenever a key is pressed """
         if key == K_BACKSPACE:
             curr_bet = curr_bet[0:-1]
         elif key <= 127:

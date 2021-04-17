@@ -19,14 +19,6 @@ class GameController(PygameController):
 
     def __init__(self):
         """ Initialize Game Controller """
-        self.deck = Deck(2)
-        self.bet_curr_input = []
-        self.hand_ongoing = False
-        self.hand_pot = 0
-        self.player_bal = 1000000
-
-    def run(self):
-        """ Main game loop"""
         pygame.init()
         self._window = pygame.display.set_mode(WINDOW_SIZE)
         self.logo = pygame.image.load("assets/spades-32.png")
@@ -36,6 +28,16 @@ class GameController(PygameController):
         self._view = MainView(self._window)
         self._bet_input = BetInputController()
         self._bet_input.run(self._view._window)
+
+        self.deck = Deck(2)
+        self.bet_curr_input = []
+        self.hand_ongoing = False
+        self.hand_pot = 0
+        self.player_bal = 1000000
+
+    def run(self):
+        """ Main game loop"""
+
         while True:
             self.bet_str = ''.join(self.bet_curr_input)
             self._view.display(self.bet_str, self.player_bal, self.hand_pot)
@@ -57,25 +59,6 @@ class GameController(PygameController):
 
                 elif self._view.has_clicked_stand(event) and self.hand_ongoing:
                     self.stand()
-
-    def serialize(self, result):
-        """ Takes a snapshot of the results of the round and serializes """
-        date = datetime.now()
-        if result == 1:
-            result_str = "Win"
-        elif result == 0:
-            result_str = "Draw"
-        elif result == -1:
-            result_str = "Loss"
-
-        return {
-            "player_hand": self.player_hand.serialize(),
-            "dealer_hand": self.dealer_hand.serialize(),
-            "hand_pot": self.hand_pot,
-            "player_bal": self.player_bal,
-            "date": date.strftime('%Y-%m-%d-%H:%M:%S'),
-            "result": result_str
-        }
 
     def reset_bet(self):
         """ Resets the bet input text """
@@ -123,6 +106,7 @@ class GameController(PygameController):
         self.player_bal -= self.betAmount
 
     def hit(self):
+        """ Runs when hit button is pressed """
         self.deal('player')
         if self.player_hand.value > 21:
             post_hand(self.serialize(-1))
@@ -144,6 +128,7 @@ class GameController(PygameController):
             self.act_on_result(result)
 
     def stand(self):
+        """ Runs when the Stand Button is clicked """
         self.hand_ongoing = False
         self.deal_dealer()
         self._view.display(self.bet_str, self.player_bal, self.hand_pot)
@@ -189,3 +174,22 @@ class GameController(PygameController):
         HandDoneController(hand_done_msg, profit).run(self._view._window)
 
         self.hand_pot = 0
+
+    def serialize(self, result):
+        """ Takes a snapshot of the results of the round and serializes """
+        date = datetime.now()
+        if result == 1:
+            result_str = "Win"
+        elif result == 0:
+            result_str = "Draw"
+        elif result == -1:
+            result_str = "Loss"
+
+        return {
+            "player_hand": self.player_hand.serialize(),
+            "dealer_hand": self.dealer_hand.serialize(),
+            "hand_pot": self.hand_pot,
+            "player_bal": self.player_bal,
+            "date": date.strftime('%Y-%m-%d-%H:%M:%S'),
+            "result": result_str
+        }

@@ -6,6 +6,7 @@ from pygame.sprite import Sprite
 
 class Card(Sprite):
     def __init__(self, suit: str, rank: str):
+        """ Init one card """
         super().__init__()
         if suit not in POSSIBLE_SUITS:
             raise AttributeError(f"Suit must be in {POSSIBLE_SUITS}")
@@ -24,6 +25,7 @@ class Card(Sprite):
             self.value = 1
 
     def update(self):
+        """ Gets the card image and creates a card surface """
         surface = pygame.Surface(CARD_SIZE, pygame.SRCALPHA)
         card_filename = f"assets/sprites/card{self.suit.capitalize()}{self.rank}.png"
         card_image = pygame.image.load(card_filename)
@@ -36,9 +38,12 @@ class CardBack(Sprite):
     """ Class for the card backs, used in the deck display """
 
     def __init__(self):
+        """ Init Card Back """
         super().__init__()
 
     def update(self):
+        """ Gets the card image and creates a card surface """
+
         surface = pygame.Surface(CARD_SIZE, pygame.SRCALPHA)
         card_filename = f"assets/sprites/cardBack.png"
         card_image = pygame.image.load(card_filename).convert_alpha()
