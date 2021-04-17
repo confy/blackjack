@@ -1,8 +1,5 @@
 import os
 from datetime import datetime
-from multiprocessing import Process
-
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 import pygame
 from constants import WINDOW_SIZE
@@ -13,6 +10,8 @@ from .base import PygameController
 from .bet_input import BetInputController
 from .hand_done import HandDoneController
 from .post import post_hand
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 
 class GameController(PygameController):
@@ -33,7 +32,7 @@ class GameController(PygameController):
         self.logo = pygame.image.load("assets/spades-32.png")
         pygame.display.set_icon(self.logo)
         pygame.display.set_caption("Blackjack")
-    
+
         self._view = MainView(self._window)
         self._bet_input = BetInputController()
         self._bet_input.run(self._view._window)
