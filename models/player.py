@@ -7,11 +7,10 @@ from .card import Card
 class Player(Group):
     """ Class for player and dealer hands """
 
-    def __init__(self, name: str, money: int):
+    def __init__(self, name: str):
         super().__init__()
         self._cards = []
         self._name = name
-        self._money = money
 
     def add_card(self, card) -> None:
         """ Adds cards to the hand """

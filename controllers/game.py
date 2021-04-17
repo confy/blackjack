@@ -1,11 +1,18 @@
+import os
+from datetime import datetime
+from multiprocessing import Process
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+
 import pygame
 from constants import WINDOW_SIZE
-from models import Deck, Player, player
+from models import Deck, Player
 from views import MainView
 
 from .base import PygameController
 from .bet_input import BetInputController
 from .hand_done import HandDoneController
+from .post import post_hand
 
 
 class GameController(PygameController):
@@ -13,31 +20,23 @@ class GameController(PygameController):
 
     def __init__(self):
         """ Initialize Game Controller """
+        self.deck = Deck(2)
+        self.bet_curr_input = []
+        self.hand_ongoing = False
+        self.hand_pot = 0
+        self.player_bal = 1000000
+
+    def run(self):
+        """ Main game loop"""
         pygame.init()
-        # self.turn = "player"
         self._window = pygame.display.set_mode(WINDOW_SIZE)
         self.logo = pygame.image.load("assets/spades-32.png")
         pygame.display.set_icon(self.logo)
         pygame.display.set_caption("Blackjack")
-
-        pygame.mixer.init()
-        # Song is Freddie Freeloader - Miles Davis
-        pygame.mixer.music.load("assets/freddie.mp3")
-        pygame.mixer.music.set_volume(0.4)
-        pygame.mixer.music.play()
-
+    
         self._view = MainView(self._window)
         self._bet_input = BetInputController()
-
-        self.deck = Deck(4)
         self._bet_input.run(self._view._window)
-        self.bet_curr_input = []
-        self.hand_ongoing = False
-        self.hand_pot = 0
-        self.player_bal = 100000
-
-    def run(self):
-        """ Main game loop"""
         while True:
             self.bet_str = ''.join(self.bet_curr_input)
             self._view.display(self.bet_str, self.player_bal, self.hand_pot)
@@ -51,7 +50,8 @@ class GameController(PygameController):
                 # if tuple it is mouse position
                 if self._view.has_clicked_bet(event) and not self.hand_ongoing:
                     self.bet()
-                    self.reset_hand()
+                    self.reset_bet()
+                    self.new_hand()
 
                 elif self._view.has_clicked_hit(event) and self.hand_ongoing:
                     self.hit()
@@ -59,15 +59,34 @@ class GameController(PygameController):
                 elif self._view.has_clicked_stand(event) and self.hand_ongoing:
                     self.stand()
 
-    def reset_hand(self):
+    def serialize(self, result):
+        """ Takes a snapshot of the results of the round and serializes """
+        date = datetime.now()
+        if result == 1:
+            result_str = "Win"
+        elif result == 0:
+            result_str = "Draw"
+        elif result == -1:
+            result_str = "Loss"
+
+        return {
+            "player_hand": self.player_hand.serialize(),
+            "dealer_hand": self.dealer_hand.serialize(),
+            "hand_pot": self.hand_pot,
+            "player_bal": self.player_bal,
+            "date": date.strftime('%Y-%m-%d-%H:%M:%S'),
+            "result": result_str
+        }
+
+    def reset_bet(self):
+        """ Resets the bet input text """
         self.bet_str = ''
         self.bet_curr_input = []
 
-    def new_hand(self, player_bal):
+    def new_hand(self):
         """ Creates a hand for each player and dealer and deals """
-        self.player_hand = Player("player", player_bal)
-        # house has unlimited money :(
-        self.dealer_hand = Player("dealer", 10000000)
+        self.player_hand = Player("player")
+        self.dealer_hand = Player("dealer")
         for _ in range(2):
             self.deal("player")
         self.deal("dealer")
@@ -75,6 +94,8 @@ class GameController(PygameController):
 
     def deal(self, player: str) -> None:
         """ Deals the player or dealer one card from deck """
+        if len(self.deck._cards) < 1:
+            self.deck = Deck(2)
         new_card = self.deck.get_random_card()
         if player == "player":
             self.player_hand.add_card(new_card)
@@ -89,41 +110,46 @@ class GameController(PygameController):
         self._view.attach_hands(self.player_hand, self.dealer_hand)
 
     def deal_dealer(self):
+        """ Deals to the dealer until their hand is 17 or over """
         while self.dealer_hand.value < 17:
             self.deal('dealer')
 
     def bet(self):
+        """ Runs when bet button is pressed, starts the hand, adds to the pot, deals a new hand"""
         self.hand_ongoing = True
         self.betAmount = 0 if self.bet_str == '' else int(self.bet_str)
+        # bet cannot be more than players balance
         self.betAmount = min(self.betAmount, self.player_bal)
         self.hand_pot = self.betAmount * 2
         self.player_bal -= self.betAmount
-        self.new_hand(self.player_bal)
 
     def hit(self):
         self.deal('player')
         if self.player_hand.value > 21:
+            post_hand(self.serialize(-1))
             self.hand_ongoing = False
             profit = -self.hand_pot / 2
             self.hand_pot = 0
             hand_done_msg = 'Bust'
             self._view.display(self.bet_str, self.player_bal, self.hand_pot)
 
+        if self.hand_ongoing == False:
+            HandDoneController(hand_done_msg, profit).run(self._view._window)
+
         elif self.player_hand.value == 21:
+            post_hand(self.serialize(1))
+            self.hand_ongoing = False
             self.deal_dealer()
             result = self.check_winner()
             self._view.display(self.bet_str, self.player_bal, self.hand_pot)
             self.act_on_result(result)
-
-
-        if self.hand_ongoing == False:
-            HandDoneController(hand_done_msg, profit).run(self._view._window)
 
     def stand(self):
         self.hand_ongoing = False
         self.deal_dealer()
         self._view.display(self.bet_str, self.player_bal, self.hand_pot)
         result = self.check_winner()
+        post_hand(self.serialize(result))
         self.act_on_result(result)
 
     def check_winner(self) -> int:

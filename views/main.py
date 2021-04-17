@@ -18,6 +18,12 @@ class MainView:
         self._deck = DeckView()
         self._font = pygame.font.SysFont("arial", 36, bold=True)
         self._background = pygame.image.load('assets/greenfelt.png')
+        
+        pygame.mixer.init()
+        # Song is Freddie Freeloader - Miles Davis
+        # pygame.mixer.music.load("assets/freddie.mp3")
+        # pygame.mixer.music.set_volume(0.2)
+        # pygame.mixer.music.play(-1)
 
     def display(self, bet_str, player_bal, hand_pot):
         self._window.blit(self._background, (0, 0))
